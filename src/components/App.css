@@ -1,0 +1,26 @@
+@import '~antd/dist/antd.css';
+
+/* .App {
+  text-align: center;
+
+
+  margin: 0 0 16px 0;
+  padding: 8px 24px;
+} */
+
+/* #components-layout-demo-top .logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(255,255,255,.2);
+  margin: 16px 24px 16px 0;
+  float: left;
+} */
+
+.ant-tabs .ant-tabs-left-bar .ant-tabs-tab, 
+.ant-tabs .ant-tabs-right-bar .ant-tabs-tab {
+  display: block;
+  float: none;
+  margin: 0 0 16px 0;
+  padding: 8px 16px 24px 0;
+}
+
