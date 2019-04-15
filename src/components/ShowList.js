@@ -8,8 +8,27 @@ class ShowList extends Component {
 
     componentDidMount() {
         console.log("showList didmount");
+        // if(this.props.show) {
+        //     console.log(this.props.show);
+        // }
         if(this.props.year) {
-            this.props.fetchShowsInYear(this.props.year);
+            if(this.props.shows) {
+                if (this.props.shows.filter(e => e.yearId === this.props.year).length === 0) {
+                    console.log("year not in state");
+                    this.props.fetchShowsInYear(this.props.year);
+                }
+
+                // this.props.shows.map((show) => {
+                //     console.log(show);
+                    
+                //     if(show.yearId === (this.props.year) ) {
+                //         console.log("year in state.");
+                //         return;
+                //     }
+                // });
+            }
+            
+            //this.props.fetchShowsInYear(this.props.year);
         } 
     }
 
