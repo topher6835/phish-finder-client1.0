@@ -24,3 +24,14 @@
   padding: 8px 16px 24px 0;
 }
 
+.ant-card-body {
+  padding: 10px;
+}
+
+.antTrackCompareRow {
+  font-size: 8px;
+}
+
+thead.ant-table-thead {
+  font-size: 10px;
+}

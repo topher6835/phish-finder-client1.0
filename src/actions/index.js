@@ -15,17 +15,24 @@ export const fetchShowsInYear = (year) => {
         const response = await backEnd.get(`/show/year/${year}`);
 
         dispatch({ type: 'FETCH_SHOWS', payload: response.data.data});
-    }
+    };
 };
 
 export const selectShow = (show) => {
     return (dispatch) => {
         dispatch({ type: 'SHOW_SELECTED', payload: show });
     };
+};
 
-    //  return {
-         
-         
-    //  };
- };
+export const removeAllshows = () => {
+    return (dispatch) => {
+        dispatch({ type: 'REMOVE_ALL_SHOWS' });
+    };
+};
+
+export const allowYearClickToggle = () => {
+    return (dispatch) => {
+        dispatch({type: 'ALLOW_YEAR_CLICK'})
+    }
+}
  

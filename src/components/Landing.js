@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 
 import YearsList from './YearsList';
-import ShowList from './ShowList';
-import ShowSelected from './ShowSelected';
+import CompareSelected from './CompareSelected';
 
 class Landing extends Component {
 
     render() {
         return (
             <div>
-                <h1>Landing Component</h1>
+                <h1>Phish Finder Landing</h1>
                 <YearsList />
-                <ShowList />
-                <ShowSelected />
+                {/* <CompareSelected /> */}
             </div>
         );
     }

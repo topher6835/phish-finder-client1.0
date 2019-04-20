@@ -4,8 +4,6 @@ import { Tabs, Radio } from 'antd';
 import { fetchYears } from '../actions';
 import ShowList from './ShowList';
 
-//import ShowList from './ShowList';
-//import ShowSelected from './ShowSelected';
 const TabPane = Tabs.TabPane;
 
 class YearsList extends Component {
@@ -13,6 +11,7 @@ class YearsList extends Component {
         super(props);
         this.state = {
           mode: 'top',
+          //allowYearClick: true
         };
     }
 
@@ -29,7 +28,7 @@ class YearsList extends Component {
     responsiveMode() {
         if(window.innerWidth < 500 ) {
             this.setState({mode: 'left'});
-          }
+        }
     }
 
     responsiveTabs() {
@@ -47,7 +46,7 @@ class YearsList extends Component {
                 style={tabBarHeight} // height: 440
                 tabBarGutter={0}
                 tabBarStyle={tabBarWidth}
-                onTabClick={ (e)=> console.log("click " + e) }
+                //onTabClick={ (e)=> console.log("click " + e) }
             >
                 {this.renderYearsList()}
             </Tabs>
@@ -58,7 +57,7 @@ class YearsList extends Component {
         const reverseYears = [...this.props.years].reverse();
         return reverseYears.map(year => {
             return (
-                <TabPane tab={year} key={year}>
+                <TabPane tab={year} disabled={this.props.allowYearClick} key={year}>
                     <ShowList year={year} />
                 </TabPane>
             );
@@ -75,14 +74,13 @@ class YearsList extends Component {
                     <Radio.Button value="left">Vertical</Radio.Button>
                 </Radio.Group>
                 {this.responsiveTabs()}
-                <h1>Years List</h1>      
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => {
-    return { years: state.years };
+    return { years: state.years, allowYearClick: state.allowYearClick };
 };
 
 export default connect(mapStateToProps, { fetchYears })(YearsList);

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Route, BrowserRouter, Link, NavLink  } from 'react-router-dom';
+import { Route, NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Badge, BackTop } from 'antd';
 
 import './App.css';
 import Landing from './Landing';
-import ShowSelected from './ShowSelected';
+import CompareSelected from './CompareSelected';
+import TrackStats from './TrackStats';
 
 const { Header, Content, Footer } = Layout;
 
@@ -14,69 +15,94 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.state= {
+      menuSelected: "1"
+    };
     this.responsivePadding = { padding: '0 50px' };
   }
 
   componentWillMount(){
-    //this.setState({height: window.innerHeight + 'px'});
     if(window.innerWidth < 500 ) {
       this.responsivePadding = { padding: '0' };
     }
+    this.setMenuSelected();
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+        this.setMenuSelected();
+    }
   }
 
-  responsivePadding = { padding: '0 50px' };
+  setMenuSelected() {
+    if(window.location.pathname === "/") {
+      this.setState({ menuSelected: "1"});
+      return;
+    }
+    if(window.location.pathname === "/stash") {
+      this.setState({ menuSelected: "2"});
+      return;
+    }
+    return;
+  }
+
+  selectedSize() {
+    let count = this.props.selectedShows.length;
+    return (
+    <Badge showZero={false} count={count} style={{ backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset' }} />
+    );
+  }
+
+  //responsivePadding = { padding: '0 50px' };
 
   render() {
 
     return (
       <div className="App">
-        <BrowserRouter>
-        <Layout className="layout">
-        
-          <Header>
-            <div className="logo" />
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              defaultSelectedKeys={['1']}
-              style={{ lineHeight: '64px' }}
-            >
-              
-              <Menu.Item key="1">
-              <NavLink  to="/">
-                Find
-              </NavLink >
-              </Menu.Item>
-              
+          <Layout className="layout">
+            <Header>
+              <div className="logo" />
+              <Menu
+                theme="dark"
+                mode="horizontal"
+                selectedKeys={[this.state.menuSelected]}
+                style={{ lineHeight: "64px" }}
+              >
+                <Menu.Item key="1">
+                  <NavLink to="/">Find</NavLink>
+                </Menu.Item>
 
-              
-              <Menu.Item key="2">
-              <NavLink  to="/stash">
-                Stash
-              </NavLink >
-              </Menu.Item>
+                <Menu.Item key="2">
+                  <NavLink to="/stash">Compare {this.selectedSize()}</NavLink>
+                </Menu.Item>
 
-              {/* <Menu.Item key="3">nav 3</Menu.Item> */}
-            </Menu>
-          </Header>
-          <Content style={this.responsivePadding}>
-            <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
-            <Route exact path="/" 
-                component={Landing} />
-            <Route exact path="/stash" 
-                component={ShowSelected} />
+                <Menu.Item key="3" disabled>
+                  My History
+                </Menu.Item>
+              </Menu>
+            </Header>
+            <Content style={this.responsivePadding}>
+              <div
+                style={{ background: "#fff", padding: 24, minHeight: 280 }}
+              >
+                <Route exact path="/" component={Landing} />
+                <Route exact path="/stash" component={CompareSelected} />
+                <Route exact path="/songStats" component={TrackStats} />
+              </div>
+            </Content>
+            <div>
+              <BackTop visibilityHeight={350} />
             </div>
-          </Content>
-
-          <Footer style={{ textAlign: 'center' }}>
-            Topher Dev ©2019
-          </Footer>
-
-        </Layout>
-        </BrowserRouter>
+            <Footer style={{ textAlign: "center" }}>
+              topherdev00@gmail.com 2019
+            </Footer>
+          </Layout>
       </div>
     );
   }
 }
 
-export default connect()(App);
+const mapStateToProps = (state) => {
+  return { selectedShows: state.selectedShows};
+}
+
+export default connect(mapStateToProps)(withRouter(App));

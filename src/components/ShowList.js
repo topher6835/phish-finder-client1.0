@@ -1,66 +1,108 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Checkbox } from 'antd';
+import { Collapse, Checkbox, Spin } from 'antd';
 
-import { selectShow, fetchShowsInYear } from '../actions';
+import { selectShow, fetchShowsInYear, allowYearClickToggle } from '../actions';
+import ShowDetails from './ShowDetails';
+
+const Panel = Collapse.Panel;
+
+const customPanelStyle = {
+    fontSize: "12px",
+    padding: 0,
+    background: "#f7f7f7",
+    overflow: "hidden"
+};
 
 class ShowList extends Component {
 
-    componentDidMount() {
-        console.log("showList didmount");
-
-        if(this.props.year) {
-            if(this.props.shows) {
-                if (this.props.shows.filter(e => e.yearId === this.props.year).length === 0) {
-                    console.log("year not in state");
-                    this.props.fetchShowsInYear(this.props.year);
-                }
-            }
-            
-            //this.props.fetchShowsInYear(this.props.year);
-        } 
-    }
-
-    onChange(e, showId) {
-        this.props.selectShow(showId);
-    }
-
-    showSelectedCheck(id) {
-        if(this.props.selectedShows.includes(id)) {
-            return true;
+  componentDidMount() {
+    // fetch shows only if coming from YearsList (year prop is present)
+    if (this.props.year && this.props.shows) {
+        if (this.props.shows.filter(show => show.yearId === this.props.year).length === 0) {
+            this.fetchShowsInYear();
         }
-        return false;
     }
+  }
 
-    renderList() {
-        if(this.props.shows) {
-            return this.props.shows.map((show) => {
-                if(show.yearId === this.props.year) {
-                    return (
-                        <div key={show.id}>
-                            <p>
-                                {show.date} {show.venueName} {show.location} 
-                                <Checkbox 
-                                    value={show.id} onChange={(e) => this.onChange(e, show.id)} 
-                                    checked={this.showSelectedCheck(show.id)}
-                                >
-                                </Checkbox> 
-                            </p>
-                        </div>
-                    );
-                }
+  fetchShowsInYear() {
+    // do not allow clicking of other years until current is loaded.
+    this.props.allowYearClickToggle();
+    this.props.fetchShowsInYear(this.props.year)
+      .then(() => {
+        this.props.allowYearClickToggle();
+      });
+  }
+
+  onCheckboxChange(e, show) {
+    this.props.selectShow(show);
+  }
+
+  showSelectedCheck(id) {
+    if (this.props.selectedShows.includes(id)) {
+      return true;
+    }
+    return false;
+  }
+
+  renderShowCheckBox(show) {
+    return (
+      <Checkbox
+        onClick={e => {
+          e.stopPropagation();
+          this.onCheckboxChange(e, show);
+        }}
+        checked={this.showSelectedCheck(show)}
+      />
+    );
+  }
+
+  renderShowPanel(show) {
+    return (
+      <div key={show.id}>
+        <Collapse defaultActiveKey="1">
+          <Panel
+            header={`${show.date} ${show.venue_name}: ${show.location} `}
+            key={show.id}
+            extra={this.renderShowCheckBox(show)}
+            style={customPanelStyle}
+          >
+            <ShowDetails tracks={show.tracks} />
+          </Panel>
+        </Collapse>
+      </div>
+    );
+  }
+
+  renderList() {
+      // Determine if YearList render or SelectedShows
+      if (this.props.year && this.props.shows) {
+            return this.props.shows
+              .filter(show => show.yearId === this.props.year)
+              .map(show => {
+                return this.renderShowPanel(show);
+              });
+      }
+      // SelectedShows:
+      if (this.props.selectedShows.length > 0) {
+            return this.props.selectedShows.map(show => {
+                return this.renderShowPanel(show);
             });
-        }
-        return;
-    }
+      }
+      return <p>No Shows Selected</p>
+  }
 
-    render() {
-        return <div>{this.renderList()}</div>
-    }
+  render() {
+    return (
+      <div>
+        { !(this.props.allowYearClick) ? this.renderList() : <Spin /> }
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = (state) => {
-    return {shows: state.shows, selectedShows: state.selectedShows};
+    return {shows: state.shows, selectedShows: state.selectedShows, allowYearClick: state.allowYearClick};
 }
 
-export default connect(mapStateToProps, {selectShow, fetchShowsInYear} )(ShowList);
+export default connect(mapStateToProps, {selectShow, fetchShowsInYear, allowYearClickToggle} )(ShowList);
