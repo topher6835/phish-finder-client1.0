@@ -6,7 +6,7 @@ import { Layout, Menu, Badge, BackTop } from 'antd';
 import './App.css';
 import Landing from './Landing';
 import CompareSelected from './CompareSelected';
-import TrackStats from './TrackStats';
+import TrackInfoModal from './TrackInfoModal';
 
 const { Header, Content, Footer } = Layout;
 
@@ -52,8 +52,6 @@ class App extends Component {
     );
   }
 
-  //responsivePadding = { padding: '0 50px' };
-
   render() {
 
     return (
@@ -86,7 +84,7 @@ class App extends Component {
               >
                 <Route exact path="/" component={Landing} />
                 <Route exact path="/stash" component={CompareSelected} />
-                <Route exact path="/songStats" component={TrackStats} />
+                <Route exact path="/trackInfoModal" component={TrackInfoModal} />
               </div>
             </Content>
             <div>

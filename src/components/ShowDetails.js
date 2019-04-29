@@ -28,66 +28,6 @@ class ShowDetails extends Component {
    return uniqueSets;
   }
 
-//   renderShowDetails(setArray) {
-//     return setArray.map(set => {
-//       return (
-//         <div key={set}>
-//           <div className="col">
-//             <p style={{ fontSize: "9px", margin: "4px 0px", padding: 0 }}>
-//               <b>{set}</b>
-//             </p>
-//             {this.renderTrackBySet(set)}
-//           </div>
-//         </div>
-//       );
-//     });
-//   }
-
-//   renderItemList = (item, index) => {
-//     let trackArray = [];
-
-//     this.props.tracks.map(track => {
-//       if (track.set_name === item) {
-//         trackArray.push(track);
-//       }
-//     });
-
-//     return (
-//       <List.Item>
-//         <Card style={{ width: 200, margin: 0, padding: 0 }} title={item}>
-//           {this.formatTracks(trackArray)}
-//         </Card>
-//       </List.Item>
-//     );
-//   };
-
-//   formatTracks(tracks) {
-//     return tracks.map(track => {
-//       return (
-//         <p style={{ margin: 0 }}>
-//           <span style={{ fontSize: "8px", padding: 0, margin: 0 }}>
-//             {track.title}
-//           </span>
-//           <span style={{ fontSize: "8px", float: "right", marginLeft: "6px" }}>
-//             {this.msToTime(track.duration)}
-//           </span>
-//         </p>
-//       );
-//     });
-//   }
-
-//   renderShowDetailsCard(setArray) {
-//     let setNames = setArray;
-//     console.log(setNames.toString());
-//     return (
-//       <List
-//         grid={{gutter: 10, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3,}}
-//         dataSource={setNames}
-//         renderItem={this.renderItemList}
-//       />
-//     );
-//   }
-
   renderTrackBySet(set) {
     return this.props.tracks
       .filter(track => track.set_name === set)

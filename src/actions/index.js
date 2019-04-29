@@ -7,7 +7,6 @@ export const fetchYears = () => {
 
         dispatch({ type: 'FETCH_YEARS', payload: response.data.data });
     };
-    
 };
 
 export const fetchShowsInYear = (year) => {

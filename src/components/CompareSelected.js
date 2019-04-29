@@ -8,20 +8,21 @@ import { removeAllshows } from '../actions';
 
 class CompareSelected extends Component {
 
-    render() {
+    buttonDisabled = () => {
+        if(this.props.selectedShows.length <= 0) {
+            return true;
+        }
+        return false;
+    };
 
-        let buttonDisabled = () => {
-            if(this.props.selectedShows.length <= 0) {
-                return true;
-            }
-            return false;
-        };
+    render() {
+        //let buttonDisabled
 
         return (
             <div>
                 <h1>Selected Shows</h1>
                 <ShowList />
-                <Button type="primary" size={"small"} disabled={buttonDisabled()} onClick={() => this.props.removeAllshows()} >Remove All</Button>
+                <Button type="primary" size={"small"} disabled={this.buttonDisabled()} onClick={() => this.props.removeAllshows()} >Remove All</Button>
                 &nbsp;
                 <Button type="primary" size={"small"} disabled={true} >Save to My History</Button>
                 <br />

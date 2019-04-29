@@ -95,7 +95,7 @@ class ShowList extends Component {
   render() {
     return (
       <div>
-        { !(this.props.allowYearClick) ? this.renderList() : <Spin /> }
+        { !(this.props.allowYearClick) ? this.renderList() : <div style={{textAlign: "center", marginTop: "20px"}}><Spin /></div> }
       </div>
     );
   }

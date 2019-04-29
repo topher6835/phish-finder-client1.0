@@ -7,12 +7,17 @@ class CompareTracks extends Component {
 
     collectTracks() {
         let trackCollection = [];
-        this.props.selectedShows.map(show => ( 
-                show.tracks.map(track => (
-                    trackCollection.push(track)
-                ))
-            )
-        );
+        this.props.selectedShows.map(show => (
+
+            show.tracks.forEach(track => {
+                track.location = show.location;
+                track.venue_name = show.venue_name;
+                track.show_date = show.date;
+                track.show_id = show.id;
+                trackCollection.push(track);
+            })
+
+        ));
         return trackCollection;
     }
 
@@ -34,6 +39,7 @@ class CompareTracks extends Component {
         let durationFormatted;
         const jamSongId = 412;
 
+        // check for undefined
         tracksArray.forEach( function(track) {
             let counter = 1;
             let trackTitle = track.title;
@@ -41,18 +47,23 @@ class CompareTracks extends Component {
             durationFormatted = this.msToTime(track.duration);
 
             if(count[track.song_id] && count[track.song_id]['count']) {
-                counter = ( count[track.song_id]['count'] ) + 1;
+                // do not count duplicates in the same show
+                if((count[track.song_id]["show_id"] !== (track.show_id) || (track.song_id === jamSongId)) ) {
+                    counter = ( count[track.song_id]['count'] ) + 1;
 
-                if(track.song_id === jamSongId) {
-                    trackTitle = "Jam";
-                }
-                if(count[track.song_id]['extra'] && count[track.song_id]['extra'].length > 0) {
-                    extraInfo.push(...count[track.song_id]['extra'] );
+                    if(track.song_id === jamSongId) {
+                        trackTitle = "Jam";
+                    }
+                    if(count[track.song_id]['extra'] && count[track.song_id]['extra'].length > 0) {
+                        extraInfo.push(...count[track.song_id]['extra'] );
+                    }
                 }
             }
-            extraInfo.push({track_id: track.id, title: track.title, duration: durationFormatted, show_date: track.show_date});
 
-            count[track.song_id] = { count: counter, title: trackTitle, extra: extraInfo};
+            extraInfo.push({show_id: track.show_id, track_id: track.id, title: track.title, duration: durationFormatted, 
+                show_date: track.show_date, location: track.location, venue_name: track.venue_name});
+
+            count[track.song_id] = { count: counter, title: trackTitle, show_id: track.show_id, extra: extraInfo};
         }.bind(this));
 
         let tracksWithCount = Object.keys(count).map((k) => {
@@ -77,16 +88,14 @@ class CompareTracks extends Component {
     }
 
     render() {
-        
         let trackData = this.sortTracks(this.countTracks());
         if(trackData.length > 0) {
-
             const data = [];
 
             const columns = [{
                 title: "Song",
                 dataIndex: 'title',
-                render: (text, data, index) => <Link to={{pathname: "/songStats", state: { tracksData: data}}} >{text}</Link>
+                render: (text, data, index) => <Link to={{pathname: "/trackInfoModal", state: { tracksData: data}}} >{text}</Link>
             }, {
                 title: "Count",
                 dataIndex: 'count'
@@ -112,28 +121,8 @@ class CompareTracks extends Component {
                 </Row>
             )
 
-
-            // return trackData.map(track => {
-            //     return (
-            //         <div key={track.song_id} style={{display: "inline-block"}}>
-            //             <p style={{ fontSize: "8px", padding: 0, margin: 0 }}>
-            //                 {track.title}
-            //             <span
-            //                 style={{
-            //                 fontSize: "8px",
-            //                 float: "right",
-            //                 marginLeft: "6px",
-            //                 paddingRight: "6px"
-            //                 }}
-            //             >
-            //             {track.count}
-            //             </span>
-            //             </p>
-            //         </div>
-            //     )
-            // });
         } else {
-            return (<div>Compare Tracks</div>)
+            return(<div></div>);
         }
     }
 }
