@@ -77,7 +77,8 @@ class ShowList extends Component {
   renderList() {
       // Determine if YearList render or SelectedShows
       if (this.props.year && this.props.shows) {
-            return this.props.shows
+        const reverseShows = [...this.props.shows].reverse();
+            return reverseShows
               .filter(show => show.yearId === this.props.year)
               .map(show => {
                 return this.renderShowPanel(show);

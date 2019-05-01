@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Layout, Menu, Badge, BackTop } from 'antd';
+import { Layout, Menu, Badge, BackTop, Icon } from 'antd';
 
 import './App.css';
 import Landing from './Landing';
@@ -9,21 +9,23 @@ import CompareSelected from './CompareSelected';
 import TrackInfoModal from './TrackInfoModal';
 
 const { Header, Content, Footer } = Layout;
+const SubMenu = Menu.SubMenu;
 
 class App extends Component {
-  // TODO responsive padding for mobile
   constructor(props) {
     super(props);
 
     this.state= {
       menuSelected: "1"
     };
-    this.responsivePadding = { padding: '0 50px' };
+    this.contentResponsivePadding = { padding: '0 50px' };
+    this.headerResponsivePadding = { padding: '0 50px' };
   }
 
   componentWillMount(){
     if(window.innerWidth < 500 ) {
-      this.responsivePadding = { padding: '0' };
+      this.contentResponsivePadding = { padding: '0' };
+      this.headerResponsivePadding = { padding: '0' };
     }
     this.setMenuSelected();
   }
@@ -57,7 +59,7 @@ class App extends Component {
     return (
       <div className="App">
           <Layout className="layout">
-            <Header>
+            <Header style={this.headerResponsivePadding}>
               <div className="logo" />
               <Menu
                 theme="dark"
@@ -76,9 +78,14 @@ class App extends Component {
                 <Menu.Item key="3" disabled>
                   My History
                 </Menu.Item>
+
+                <SubMenu title={<span><Icon type="bars" style={{ fontSize: '24px' }} /></span>} key="sub1" style={{float: "right"}}>
+                  <Menu.Item key="sub1" disabled>Sign In</Menu.Item>
+                  <Menu.Item key="sub2" disabled>About</Menu.Item>
+                </SubMenu>
               </Menu>
             </Header>
-            <Content style={this.responsivePadding}>
+            <Content style={this.contentResponsivePadding}>
               <div
                 style={{ background: "#fff", padding: 24, minHeight: 280 }}
               >
