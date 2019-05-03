@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class ShowDetails extends Component {
+  
+  constructor (props) {
+    super();
+  }
+
   componentDidMount() {
     this.createSetsArray();
   }

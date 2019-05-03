@@ -16,6 +16,8 @@
   float: left;
 } */
 
+/* Overriden properties */
+
 .ant-tabs .ant-tabs-left-bar .ant-tabs-tab, 
 .ant-tabs .ant-tabs-right-bar .ant-tabs-tab {
   display: block;
@@ -34,4 +36,12 @@
 
 thead.ant-table-thead {
   font-size: 10px;
+}
+
+.ant-menu.ant-menu-dark .ant-menu-item-selected.customSelected {
+  background-color: rgb(154, 21, 22);
+}
+
+.ant-menu-dark .ant-menu-sub {
+  background-color: rgb(41,49,112);
 }

@@ -3,16 +3,20 @@ import backEnd from '../apis/backEnd';
 // thunk middleware allows function return. needed for async/await.
 export const fetchYears = () => {
     return async (dispatch) => {
-        const response = await backEnd.get('/getYears');
-
+        const response = await backEnd.get('/getYears')
+            .catch(error => {
+                throw error;
+            });
         dispatch({ type: 'FETCH_YEARS', payload: response.data.data });
     };
 };
 
 export const fetchShowsInYear = (year) => {
     return async (dispatch) => {
-        const response = await backEnd.get(`/show/year/${year}`);
-
+        const response = await backEnd.get(`/show/year/${year}`)
+            .catch(error => {
+                throw error;
+            });
         dispatch({ type: 'FETCH_SHOWS', payload: response.data.data});
     };
 };

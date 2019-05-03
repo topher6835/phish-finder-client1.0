@@ -17,7 +17,7 @@ const customPanelStyle = {
 class ShowList extends Component {
 
   componentDidMount() {
-    // fetch shows only if coming from YearsList (year prop is present)
+    // Fetch shows only if coming from YearsList (year prop is present)
     if (this.props.year && this.props.shows) {
         if (this.props.shows.filter(show => show.yearId === this.props.year).length === 0) {
             this.fetchShowsInYear();
@@ -26,11 +26,17 @@ class ShowList extends Component {
   }
 
   fetchShowsInYear() {
-    // do not allow clicking of other years until current is loaded.
+    // Do not allow clicking of other years until current is loaded.
     this.props.allowYearClickToggle();
     this.props.fetchShowsInYear(this.props.year)
       .then(() => {
         this.props.allowYearClickToggle();
+      })
+      .catch(err => {
+        // If request times out add the year to reMount state. Component will unmount and retry fetch on subsequent clicks.
+        this.props.allowYearClickToggle();
+        this.props.pushRemount(this.props.yearIndex);
+        throw err;
       });
   }
 
@@ -75,7 +81,7 @@ class ShowList extends Component {
   }
 
   renderList() {
-      // Determine if YearList render or SelectedShows
+      // Determine if YearList render or SelectedShows (if YearList year prop will be present)
       if (this.props.year && this.props.shows) {
         const reverseShows = [...this.props.shows].reverse();
             return reverseShows

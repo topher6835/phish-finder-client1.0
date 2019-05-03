@@ -45,7 +45,7 @@ class TrackInfoModal extends Component {
   renderTracksInfo(tracksData) {
     return tracksData.map((track, index) => {
         return (
-            <div key={index} style={{fontSize: "8px"}} onClick={() => this.trackClick(track.show_id)} >
+            <div key={index} style={{fontSize: "8px", cursor: "pointer", color: "blue"}} onClick={() => this.trackClick(track.show_id)} >
                 {track.title} &nbsp; {track.show_date} &nbsp; {track.venue_name} &nbsp; {track.location}
             </div>
         )
@@ -90,7 +90,7 @@ class TrackInfoModal extends Component {
           okButtonProps={{ disabled: this.state.modalBack }}
           onCancel={this.handleCancel}
           cancelText={"Close"}
-          maskStyle={{background: "black"}}
+          maskStyle={{background: "rgb(41,49,112)"}}
         >
             {this.getModalView(trackData)}
         </Modal>

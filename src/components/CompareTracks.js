@@ -39,7 +39,6 @@ class CompareTracks extends Component {
         let durationFormatted;
         const jamSongId = 412;
 
-        // check for undefined
         tracksArray.forEach( function(track) {
             let counter = 1;
             let trackTitle = track.title;

@@ -19,7 +19,7 @@ class App extends Component {
       menuSelected: "1"
     };
     this.contentResponsivePadding = { padding: '0 50px' };
-    this.headerResponsivePadding = { padding: '0 50px' };
+    this.headerResponsivePadding = { padding: '0 50px', backgroundColor: 'rgb(41,49,112)' };
   }
 
   componentWillMount(){
@@ -65,17 +65,17 @@ class App extends Component {
                 theme="dark"
                 mode="horizontal"
                 selectedKeys={[this.state.menuSelected]}
-                style={{ lineHeight: "64px" }}
+                style={{ lineHeight: "64px", backgroundColor: 'rgb(41,49,112)' }}
               >
-                <Menu.Item key="1">
+                <Menu.Item key="1" className="customSelected" style={{  }}>
                   <NavLink to="/">Find</NavLink>
                 </Menu.Item>
 
-                <Menu.Item key="2">
+                <Menu.Item key="2" className="customSelected" style={{  }}>
                   <NavLink to="/stash">Compare {this.selectedSize()}</NavLink>
                 </Menu.Item>
 
-                <Menu.Item key="3" disabled>
+                <Menu.Item key="3" className="customSelected" disabled>
                   My History
                 </Menu.Item>
 

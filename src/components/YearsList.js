@@ -9,16 +9,37 @@ const TabPane = Tabs.TabPane;
 class YearsList extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
           mode: 'top',
-          //allowYearClick: true
+          reMount: [],
+          yearsLoadingText: 'Loading...'
         };
     }
 
     componentDidMount() {
         this.responsiveMode();
-        this.props.fetchYears();
+        if(!this.props.years.length > 0) {
+            this.props.fetchYears()
+                .catch(err => {
+                    this.setState({ yearsLoadingText: 'Error fetching data. Please try again later.' });
+                    throw err;
+                })
+        }
     }
+
+    //// Handle api request time outs ////
+    pushToRemountList = (year) => {
+        this.setState({ reMount: [ ...this.state.reMount, year] });
+    }
+    removeFromRemountList = (year) => {
+        let yearInt = parseInt(year);
+        if(this.state.reMount.indexOf(yearInt) !== -1) {
+            let filteredList = this.state.reMount.filter(val => val !== yearInt);
+            this.setState({ reMount: filteredList });
+        }
+    }
+    //// //// ////
 
     handleModeChange = (e) => {
         const mode = e.target.value;
@@ -34,31 +55,39 @@ class YearsList extends Component {
     responsiveTabs() {
         let tabBarWidth = {};
         let tabBarHeight= {height: "auto"};
-        // TODO adjust 100 offset after final styling
         if(this.state.mode === "left") {
             tabBarWidth = {width: "90px"};
             tabBarHeight = { minHeight: window.innerHeight - 100, height: "auto"};
         }
-        return (
-            <Tabs
-                defaultActiveKey="1"
-                tabPosition={this.state.mode}
-                style={tabBarHeight} // height: 440
-                tabBarGutter={0}
-                tabBarStyle={tabBarWidth}
-                //onTabClick={ (e)=> console.log("click " + e) }
-            >
-                {this.renderYearsList()}
-            </Tabs>
-        );
+        if(this.props.years.length > 0) {
+            return (
+                <Tabs
+                    defaultActiveKey="0"
+                    tabPosition={this.state.mode}
+                    style={tabBarHeight}
+                    tabBarGutter={0}
+                    tabBarStyle={tabBarWidth}
+                    onTabClick={ (e)=> { this.removeFromRemountList(e) } }
+                >
+                    {this.renderYearsList()}
+                </Tabs>
+            );
+        } else {
+            return <p>{this.state.yearsLoadingText}</p>
+        }
+        
     }
 
     renderYearsList() {
         const reverseYears = [...this.props.years].reverse();
-        return reverseYears.map(year => {
+        return reverseYears.map((year, index) => {
             return (
-                <TabPane tab={year} disabled={this.props.allowYearClick} key={year}>
-                    <ShowList year={year} />
+                <TabPane tab={year} disabled={this.props.allowYearClick} key={index}>
+                    {
+                        this.state.reMount.indexOf(index) !== -1 ? <p>The request took longer than expected. Please try again.</p> : 
+                        <ShowList year={year} yearIndex={index} pushRemount={this.pushToRemountList} 
+                            removeFromRemount={this.removeFromRemountList} reMountList={this.state.reMount} /> 
+                    }
                 </TabPane>
             );
         });
@@ -68,12 +97,11 @@ class YearsList extends Component {
         const { mode } = this.state;
 
         return (
-            <div>
-                <Radio.Group onChange={this.handleModeChange} value={mode} style={{ marginBottom: 8 }}>
+            <div style={{  }}> 
+                {/* <Radio.Group onChange={this.handleModeChange} value={mode} style={{ marginBottom: 8 }}>
                     <Radio.Button value="top">Horizontal</Radio.Button>
                     <Radio.Button value="left">Vertical</Radio.Button>
-                </Radio.Group>
-                {/* {this.props.years.length > 0 ? this.responsiveTabs() : <p>Could Not Load Data</p> } */}
+                </Radio.Group> */}
                 {this.responsiveTabs()}
             </div>
         );
