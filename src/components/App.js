@@ -87,7 +87,7 @@ class App extends Component {
             </Header>
             <Content style={this.contentResponsivePadding}>
               <div
-                style={{ background: "#fff", padding: 24, minHeight: 280 }}
+                style={{ background: "#fff", padding: 24, minHeight: 'calc(100vh - 64px)' }} // minHeight: 280
               >
                 <Route exact path="/" component={Landing} />
                 <Route exact path="/stash" component={CompareSelected} />
