@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Radio } from 'antd';
+import { Tabs } from 'antd';
 import { fetchYears } from '../actions';
 import ShowList from './ShowList';
 
@@ -56,7 +56,7 @@ class YearsList extends Component {
         let tabBarWidth = {};
         let tabBarHeight= {height: "auto"};
         if(this.state.mode === "left") {
-            tabBarWidth = {width: "90px"};
+            tabBarWidth = {width: "50px"}; // 90px
             tabBarHeight = { minHeight: window.innerHeight - 100, height: "auto"};
         }
         if(this.props.years.length > 0) {
@@ -75,12 +75,15 @@ class YearsList extends Component {
         } else {
             return <p>{this.state.yearsLoadingText}</p>
         }
-        
     }
 
     renderYearsList() {
         const reverseYears = [...this.props.years].reverse();
         return reverseYears.map((year, index) => {
+            // Modify multi years to fit left tabs
+            if(year === "1983-1987" && this.state.mode === "left") {
+                year = <div>1983-<br/>1987</div>;
+            }
             return (
                 <TabPane tab={year} disabled={this.props.allowYearClick} key={index}>
                     {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'antd';
+import moment from 'moment';
 
 import ShowDetails from './ShowDetails';
 
@@ -25,7 +26,6 @@ class TrackInfoModal extends Component {
   };
 
   handleOk = e => {
-    console.log(e);
     if(this.state.modalView === "show") {
         this.setState({
             modalView: 'tracks',
@@ -35,19 +35,22 @@ class TrackInfoModal extends Component {
   };
 
   handleCancel = e => {
-    console.log(e);
     this.setState({
         modalVisible: false,
     });
     this.props.history.goBack();
   };
 
+  formatDate(date) {
+    return  moment(date, "YYYY-MM-DD").format("MM-DD-YYYY");
+  }
+
   renderTracksInfo(tracksData) {
     return tracksData.map((track, index) => {
         return (
-            <div key={index} style={{fontSize: "8px", cursor: "pointer", color: "blue"}} onClick={() => this.trackClick(track.show_id)} >
-                {track.title} &nbsp; {track.show_date} &nbsp; {track.venue_name} &nbsp; {track.location}
-            </div>
+          <li className="trackModalLI" key={index} style={{ cursor: "pointer", fontSize: "13px" }} onClick={() => this.trackClick(track.show_id)}>
+            {track.title}: <span style={{ color: "blue" }}>{this.formatDate(track.show_date)} {track.venue_name} </span>
+          </li>
         )
     })
   }
@@ -69,9 +72,8 @@ class TrackInfoModal extends Component {
 
   getModalView (tracksData) {
       if(this.state.modalView === "tracks") {
-          return (this.renderTracksInfo(tracksData));
+          return (<ul style={{ display: "inline-grid", listStyle: "none" }}>{this.renderTracksInfo(tracksData)}</ul>);
       } else if(this.state.modalView === "show") {
-          console.log(this.state.selectedShowId);
           let tracks = this.getTracksFromState(this.state.selectedShowId);
           return (<ShowDetails tracks={tracks} />);
       } else return (<p>Nothing to display</p>);
@@ -79,7 +81,6 @@ class TrackInfoModal extends Component {
 
   render() {
     let trackData = this.props.location.state.tracksData.data.extra;
-    console.log(trackData);
     return (
       <div>
         <Modal
@@ -91,6 +92,7 @@ class TrackInfoModal extends Component {
           onCancel={this.handleCancel}
           cancelText={"Close"}
           maskStyle={{background: "rgb(41,49,112)"}}
+          bodyStyle={{ padding: '12px'}}
         >
             {this.getModalView(trackData)}
         </Modal>

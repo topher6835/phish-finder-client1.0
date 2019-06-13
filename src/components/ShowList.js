@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Collapse, Checkbox, Spin } from 'antd';
+import moment from 'moment';
 
 import { selectShow, fetchShowsInYear, allowYearClickToggle } from '../actions';
 import ShowDetails from './ShowDetails';
@@ -8,7 +9,7 @@ import ShowDetails from './ShowDetails';
 const Panel = Collapse.Panel;
 
 const customPanelStyle = {
-    fontSize: "12px",
+    // fontSize: "12px",
     padding: 0,
     background: "#f7f7f7",
     overflow: "hidden"
@@ -63,12 +64,16 @@ class ShowList extends Component {
     );
   }
 
+  formatDate(date) {
+    return  moment(date, "YYYY-MM-DD").format("MM-DD-YYYY");
+  }
+
   renderShowPanel(show) {
     return (
       <div key={show.id}>
         <Collapse defaultActiveKey="1">
           <Panel
-            header={`${show.date} ${show.venue_name}: ${show.location} `}
+            header={`${this.formatDate(show.date)} ${show.venue_name}: ${show.location}`}
             key={show.id}
             extra={this.renderShowCheckBox(show)}
             style={customPanelStyle}

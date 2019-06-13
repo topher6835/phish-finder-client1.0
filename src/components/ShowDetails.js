@@ -2,17 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class ShowDetails extends Component {
-  
-  constructor (props) {
+  constructor(props) {
     super();
+
+    this.state = {
+      responsiveMinWidth: "260px",
+      responsiveFontSize: ""
+    };
   }
 
   componentDidMount() {
     this.createSetsArray();
+    this.responsiveMode();
   }
 
   msToTime(duration) {
-    //let milliseconds = parseInt((duration % 1000) / 100);
     let seconds = parseInt((duration / 1000) % 60);
     let minutes = parseInt((duration / (1000 * 60)) % 60);
     let hours = parseInt((duration / (1000 * 60 * 60)) % 24);
@@ -24,13 +28,23 @@ class ShowDetails extends Component {
     return hours + minutes + ":" + seconds;
   }
 
+  responsiveMode() {
+    if (window.innerWidth < 500) {
+      this.setState({
+        responsiveMinWidth: "230px",
+        responsiveFontSize: "12px"
+      });
+    }
+  }
+
   createSetsArray() {
     const showTracks = this.props.tracks;
 
-    let uniqueSets = showTracks.map(track => track.set_name)
-    .filter((value, index, self) => self.indexOf(value) === index);
+    let uniqueSets = showTracks
+      .map(track => track.set_name)
+      .filter((value, index, self) => self.indexOf(value) === index);
 
-   return uniqueSets;
+    return uniqueSets;
   }
 
   renderTrackBySet(set) {
@@ -39,21 +53,25 @@ class ShowDetails extends Component {
       .map(track => {
         let trackTime = this.msToTime(track.duration);
         return (
-          <div key={track.id}>
-            <p style={{ fontSize: "8px", padding: 0, margin: 0 }}>
-              {track.title}
-              <span
-                style={{
-                  fontSize: "8px",
-                  float: "right",
-                  marginLeft: "6px",
-                  paddingRight: "6px"
-                }}
-              >
-                {trackTime}
-              </span>
-            </p>
-          </div>
+          <li
+            key={track.id}
+            style={{
+              minWidth: this.state.responsiveMinWidth,
+              fontSize: this.state.responsiveFontSize
+            }}
+          >
+            {track.title}
+            <span
+              style={{
+                // fontSize: "8px",
+                float: "right",
+                marginLeft: "6px",
+                paddingRight: "6px"
+              }}
+            >
+              {trackTime}
+            </span>
+          </li>
         );
       });
   }
@@ -63,13 +81,20 @@ class ShowDetails extends Component {
 
     return setArray.map(set => {
       return (
-        <div style={{ display: "inline-block", verticalAlign: "top" }} key={set}>
-          <span style={{ fontSize: "10px", fontWeight: "bold" }}>{set}</span>
+        <ul
+          style={{
+            display: "inline-grid",
+            listStyle: "none",
+            verticalAlign: "top",
+            padding: 0
+          }}
+          key={set}
+        >
+          <span style={{ fontWeight: "bold" }}>{set}</span>{" "}
           {this.renderTrackBySet(set)}
-        </div>
+        </ul>
       );
     });
-
   }
 }
 

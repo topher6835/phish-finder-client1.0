@@ -31,11 +31,11 @@
 }
 
 .antTrackCompareRow {
-  font-size: 8px;
+  /* font-size: 8px; */
 }
 
 thead.ant-table-thead {
-  font-size: 10px;
+  /* font-size: 10px; */
 }
 
 .ant-menu.ant-menu-dark .ant-menu-item-selected.customSelected {
@@ -44,4 +44,11 @@ thead.ant-table-thead {
 
 .ant-menu-dark .ant-menu-sub {
   background-color: rgb(41,49,112);
+}
+
+.trackModalLI {
+  padding: 5px 0;
+}
+.trackModalLI ~ .trackModalLI {
+  border-top: .5px solid lightgray;
 }

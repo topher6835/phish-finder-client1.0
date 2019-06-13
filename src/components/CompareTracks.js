@@ -46,7 +46,7 @@ class CompareTracks extends Component {
             durationFormatted = this.msToTime(track.duration);
 
             if(count[track.song_id] && count[track.song_id]['count']) {
-                // do not count duplicates in the same show
+                // Do not count duplicates in the same show
                 if((count[track.song_id]["show_id"] !== (track.show_id) || (track.song_id === jamSongId)) ) {
                     counter = ( count[track.song_id]['count'] ) + 1;
 
@@ -113,7 +113,7 @@ class CompareTracks extends Component {
 
             return (
                 <Row>
-                    <Col span={12} offset={6}>
+                    <Col span={18} offset={3}> {/* 12 6 */}
                         <Table columns={columns} dataSource={data} size={"small"} pagination={false} 
                             className={"antTrackTable"} rowClassName={"antTrackCompareRow"} />
                     </Col>
