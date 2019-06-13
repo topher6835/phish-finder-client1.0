@@ -55,10 +55,6 @@ class App extends Component {
   }
 
   render() {
-
-    console.log("process.", process);
-    console.log("processenv.", process.env);
-
     return (
       <div className="App">
           <Layout className="layout">
